@@ -96,4 +96,8 @@ ACI has the **lowest barrier to entry** of all four container services. If you c
 ## Learn More
 
 - [Azure Container Instances documentation](https://learn.microsoft.com/azure/container-instances/)
+- [ACI source docs on GitHub](https://github.com/microsoftdocs/azure-docs/tree/main/articles/container-instances) — community-maintained, always up to date
+- [ACI container groups](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-instances/container-instances-container-groups.md)
+- [ACI virtual network deployment](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-instances/container-instances-vnet.md)
+- [ACI GPU resources](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-instances/container-instances-gpu.md)
 - [Back to README](../README.md)

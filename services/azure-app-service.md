@@ -108,4 +108,8 @@ App Service has a **low barrier to entry** and is well-suited for teams that wan
 
 - [Azure App Service documentation](https://learn.microsoft.com/azure/app-service/)
 - [Deploy a custom container to App Service](https://learn.microsoft.com/azure/app-service/quickstart-custom-container)
+- [App Service source docs on GitHub](https://github.com/microsoftdocs/azure-docs/tree/main/articles/app-service) — community-maintained, always up to date
+- [App Service Plans](https://github.com/microsoftdocs/azure-docs/blob/main/articles/app-service/overview-hosting-plans.md)
+- [App Service networking](https://github.com/microsoftdocs/azure-docs/blob/main/articles/app-service/networking-features.md)
+- [Custom containers on App Service](https://github.com/microsoftdocs/azure-docs/blob/main/articles/app-service/configure-custom-container.md)
 - [Back to README](../README.md)

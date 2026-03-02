@@ -83,4 +83,8 @@ ACA is a good fit for teams that are comfortable with containers but do not want
 ## Learn More
 
 - [Azure Container Apps documentation](https://learn.microsoft.com/azure/container-apps/)
+- [ACA source docs on GitHub](https://github.com/microsoftdocs/azure-docs/tree/main/articles/container-apps) — community-maintained, always up to date
+- [ACA scaling and KEDA](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-apps/scale-app.md)
+- [ACA networking](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-apps/networking.md)
+- [ACA Dapr integration](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-apps/dapr-overview.md)
 - [Back to README](../README.md)

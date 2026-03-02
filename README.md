@@ -9,9 +9,10 @@ Choosing the right container service in Azure can feel overwhelming. This guide 
 | [Azure Container Apps (ACA)](services/azure-container-apps.md) | Serverless container platform with built-in scaling | Microservices, APIs, event-driven apps | Medium — Docker + basic scaling concepts |
 | [Azure Container Instances (ACI)](services/azure-container-instances.md) | Run containers on-demand without managing infrastructure | Batch jobs, short-lived tasks, simple workloads | Low — Docker basics + Azure CLI |
 | [Azure App Service](services/azure-app-service.md) | Managed PaaS for web apps and APIs with container support | Web apps, REST APIs, teams wanting minimal ops | Low — Docker basics + familiarity with PaaS |
+| [Azure Functions](services/azure-functions.md) | Serverless functions runtime with custom container support | Event-driven logic, trigger-based workloads with custom dependencies | Medium — Functions model + Docker basics |
 | Azure Kubernetes Service (AKS) | Fully managed Kubernetes for complex container orchestration | Large-scale microservices, teams with Kubernetes expertise | High — Kubernetes, Helm, cluster ops |
 
-> **Note:** AKS is included in comparisons for completeness, but this guide focuses primarily on ACA, ACI, and App Service — the three services most accessible to teams without deep Kubernetes experience.
+> **Note:** AKS is included in comparisons for completeness, but this guide focuses primarily on ACA, ACI, App Service, and Azure Functions — the four services most accessible to teams without deep Kubernetes experience.
 
 ## Quick Decision Flowchart
 
@@ -24,7 +25,8 @@ Choosing the right container service in Azure can feel overwhelming. This guide 
    - No → Continue
 
 3. **Is your workload event-driven or do you need scale-to-zero?**
-   - Yes → **Azure Container Apps (ACA)**
+   - Yes, and it's made up of discrete event handlers (react → process → done) → **Azure Functions**
+   - Yes, and it's a full service/API that receives events → **Azure Container Apps (ACA)**
    - No → Continue
 
 4. **Are you deploying a web app or API and want the simplest managed experience?**
@@ -39,6 +41,7 @@ For a more detailed decision process that accounts for team skills, scaling need
 - [Azure Container Apps](services/azure-container-apps.md)
 - [Azure Container Instances](services/azure-container-instances.md)
 - [Azure App Service (Containers)](services/azure-app-service.md)
+- [Azure Functions (Containers)](services/azure-functions.md)
 
 ### Comparisons
 - [Feature Comparison](comparisons/feature-comparison.md) — side-by-side table of capabilities across all four services

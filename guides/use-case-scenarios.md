@@ -125,7 +125,33 @@ A small web app (personal dashboard) that gets a handful of requests per hour. N
 
 ---
 
-## Scenario 6: Team Migrating from Docker Compose
+## Scenario 6: Integration Team — Event-Driven Glue Code
+
+### Profile
+- **Team:** 4 developers on an integrations team, familiar with C#/.NET or Python
+- **Skills:** Strong experience with Azure services (Service Bus, Blob Storage, Cosmos DB). Know the Azure Functions programming model. Can write Dockerfiles but are not container experts.
+- **Priority:** React to events from multiple Azure services, process data, and forward results — with custom dependencies that don't fit the built-in Functions runtime
+
+### Workload
+Three functions: (1) trigger on blob upload → resize image → write back to storage, (2) trigger on Service Bus message → enrich data from an API → write to Cosmos DB, (3) timer trigger → generate nightly summary report. The team needs a custom Linux image because the image processing library isn't available in the standard Functions runtime.
+
+### Recommendation: **Azure Functions (Custom Container)**
+
+**Why it fits:**
+- The triggers/bindings model is the natural fit — "on this event, run this code" is exactly how this team thinks
+- Custom container support means the team can install any native dependency (image processing, ML models, etc.) in their Docker image while keeping the Functions programming model
+- Scale-to-zero on Flex Consumption means the nightly report function costs nothing during the day
+- Built-in integration with Blob Storage, Service Bus, and Cosmos DB via bindings — no SDK boilerplate needed
+
+**If they chose ACA instead:** The team would need to write their own queue consumers, blob event handlers, and timer loops. ACA can do it, but the team would be rebuilding what Functions provides out of the box.
+
+**If they chose ACI instead:** ACI has no event-trigger mechanism — the team would need external orchestration (Logic Apps, Automation) and would lose the functions programming model.
+
+**If they chose App Service instead:** No scale-to-zero, no native trigger/binding support, and the team would write more infrastructure code.
+
+---
+
+## Scenario 7: Team Migrating from Docker Compose
 
 ### Profile
 - **Team:** 5 developers using Docker Compose locally for development
@@ -158,6 +184,7 @@ A web app (frontend + backend API + Redis cache) currently defined in a Docker C
 | Event-driven microservices | 8 devs + 1 DevOps | Docker + queues | ACA |
 | Large-scale production | 20+ devs + 4 SREs | Kubernetes + GitOps | AKS |
 | Solo side project | 1 developer | Basic Docker | ACA (Consumption) |
+| Event-driven glue code | 4 integration devs | Functions + Docker | Azure Functions (Container) |
 | Docker Compose migration | 5 developers | Docker Compose | ACA |
 
 ## Learn More
@@ -165,4 +192,11 @@ A web app (frontend + backend API + Redis cache) currently defined in a Docker C
 - [Decision Guide](decision-guide.md)
 - [Feature Comparison](../comparisons/feature-comparison.md)
 - [Pricing Comparison](../comparisons/pricing-comparison.md)
+
+### Official Azure Docs (GitHub)
+- [Compare container hosting options in Azure](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-apps/compare-options.md)
+- [Container Apps quickstart](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-apps/get-started.md)
+- [Container Instances quickstart](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-instances/container-instances-quickstart.md)
+- [App Service custom container quickstart](https://github.com/microsoftdocs/azure-docs/blob/main/articles/app-service/quickstart-custom-container.md)
+- [Azure Functions on containers quickstart](https://github.com/microsoftdocs/azure-docs/blob/main/articles/azure-functions/functions-deploy-container.md)
 - [Back to README](../README.md)

@@ -33,6 +33,7 @@ Specifically: Is someone on the team comfortable with `kubectl`, Helm charts, YA
 |---------|-----------------|---------------------|
 | ACI | Low | Docker basics, Azure CLI |
 | App Service | Low | Docker basics, Azure Portal/CLI, PaaS concepts |
+| Azure Functions | Medium | Functions model (triggers/bindings), Docker basics |
 | ACA | Medium | Docker, understanding of scaling and event-driven patterns |
 | AKS | High | Kubernetes, Helm, networking, cluster operations, CI/CD |
 
@@ -58,13 +59,16 @@ Examples: nightly data processing, CI/CD build runner, report generation, one-of
 
 ### Question 3A: Does your workload need to scale based on events (queue messages, topics, webhooks)?
 
-- **Yes** → **ACA** is designed for this with KEDA-based scaling. AKS also supports KEDA but requires more setup.
+- **Yes, and the logic is discrete event handlers** (receive → process → respond) → **Azure Functions** excels at this with built-in triggers and bindings.
+- **Yes, and the workload is a full long-running service or API** → **ACA** is designed for this with KEDA-based scaling.
+- **Either, and you need both patterns in one environment** → **ACA** supports Functions on Container Apps (hybrid).
 - **No — traffic is HTTP-based or steady** → Continue.
 
 ### Question 3B: Do you need scale-to-zero to avoid paying during idle periods?
 
-- **Yes** → **ACA (Consumption)** is the only service with native scale-to-zero for long-running apps. ACI only costs money while running, but you manage start/stop manually.
-- **No — always-on is fine** → App Service, ACA (Dedicated), and AKS all work.
+- **Yes, for event-driven functions** → **Azure Functions (Flex Consumption)** scales to zero natively.
+- **Yes, for long-running services/APIs** → **ACA (Consumption)** scales to zero natively. ACI only costs money while running, but you manage start/stop manually.
+- **No — always-on is fine** → App Service, ACA (Dedicated), Functions (Premium), and AKS all work.
 
 ### Question 3C: Do you need to run many interconnected microservices?
 
@@ -118,6 +122,7 @@ After working through the steps above, use this matrix to confirm your choice:
 | A short-lived batch job or task | Has basic Docker skills | **ACI** |
 | A single web app or API | Wants the simplest managed experience | **App Service** |
 | Event-driven microservices | Knows Docker but not Kubernetes | **ACA** |
+| Discrete event handlers (queue, blob, timer) | Has Functions experience or wants trigger-based model | **Azure Functions** |
 | A web app that needs scale-to-zero | Wants to minimize idle costs | **ACA (Consumption)** |
 | Complex multi-service with strict networking | Has Kubernetes + platform engineering expertise | **AKS** |
 | A quick prototype or experiment | Is new to containers | **ACI** or **App Service** |
@@ -137,9 +142,19 @@ After working through the steps above, use this matrix to confirm your choice:
 
 5. **Over-provisioning "just in case"** — Start with the simplest service that meets your needs. You can migrate to a more powerful option later as your workload and team grow.
 
+6. **Using ACA for simple event handlers when Functions would be simpler** — If your workload is "on queue message, run this code," Azure Functions with a custom container is more natural than building a full service in ACA. The triggers/bindings model handles input/output plumbing that you'd otherwise write yourself.
+
 ## Learn More
 
 - [Feature Comparison](../comparisons/feature-comparison.md)
 - [Pricing Comparison](../comparisons/pricing-comparison.md)
 - [Use-Case Scenarios](use-case-scenarios.md)
+
+### Official Azure Docs (GitHub)
+- [Compare container hosting options in Azure](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-apps/compare-options.md) — Microsoft's own comparison page
+- [Container Apps docs](https://github.com/microsoftdocs/azure-docs/tree/main/articles/container-apps)
+- [Container Instances docs](https://github.com/microsoftdocs/azure-docs/tree/main/articles/container-instances)
+- [App Service docs](https://github.com/microsoftdocs/azure-docs/tree/main/articles/app-service)
+- [Azure Functions docs](https://github.com/microsoftdocs/azure-docs/tree/main/articles/azure-functions)
+- [AKS docs](https://github.com/microsoftdocs/azure-docs/tree/main/articles/aks)
 - [Back to README](../README.md)

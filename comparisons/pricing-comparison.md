@@ -12,12 +12,15 @@ Understanding cost differences between Azure container services is critical for 
 | **Azure Container Apps (Dedicated)** | Reserved workload profiles | Yes — reserved capacity runs continuously | Cost of the workload profile |
 | **Azure Container Instances** | Per vCPU-second + per GiB-second | No — stopped containers cost nothing | $0 when not running |
 | **Azure App Service** | Monthly plan cost (tier-based) | Yes — plan runs 24/7 | ~$13/month (Basic B1 tier) |
+| **Azure Functions (Flex Consumption)** | Per execution + per vCPU-second + per GiB-second | No — scale-to-zero | $0 (monthly free grants) |
+| **Azure Functions (Premium)** | Pre-warmed instances + extra burst capacity | Yes — minimum 1 warm instance | ~$175/month (EP1 tier) |
 | **Azure Kubernetes Service** | Cost of VM node pools | Yes — nodes run 24/7 | Cost of smallest VM × node count |
 
 ## Key Takeaways
 
-- **ACA (Consumption) and ACI** use true pay-per-use billing — ideal for workloads with unpredictable or bursty usage
+- **ACA (Consumption), ACI, and Azure Functions (Flex Consumption)** use true pay-per-use billing — ideal for workloads with unpredictable or bursty usage
 - **App Service** has predictable monthly costs — good for steady workloads where you want budget certainty
+- **Azure Functions (Premium)** offers a middle ground — pre-warmed instances avoid cold starts but cost more than Flex Consumption
 - **AKS** costs are driven by the VMs in your node pools — you pay for capacity whether or not it's fully utilized
 
 ## Example Scenarios
@@ -60,11 +63,12 @@ Understanding cost differences between Azure container services is critical for 
 | Service | Approximate Monthly Cost | Notes |
 |---------|------------------------|-------|
 | **ACA (Consumption)** | ~$15–30/month | Scales to zero overnight/weekends; KEDA scales with queue depth |
+| **Azure Functions (Flex Consumption)** | ~$10–25/month | Native queue/topic triggers; scale-to-zero; great fit if logic is event handlers |
 | **App Service (3× Standard S1)** | ~$210/month | Three plans running 24/7; no scale-to-zero |
 | **ACI (3 groups)** | ~$25–40/month | Manual management of start/stop; no autoscale on queue depth |
 | **AKS (2-node cluster)** | ~$70–90/month | Handles it well but requires Kubernetes skills |
 
-**Recommendation:** **ACA** is the clear winner here — scale-to-zero and KEDA-based queue scaling were built for exactly this pattern.
+**Recommendation:** **ACA** is the clear winner for full microservices. If your workload is better modelled as discrete event handlers rather than long-running services, **Azure Functions (Flex Consumption)** can be even cheaper and simpler.
 
 ---
 
@@ -75,6 +79,7 @@ Understanding cost differences between Azure container services is critical for 
 | Service | Approximate Monthly Cost | Notes |
 |---------|------------------------|-------|
 | **ACA (Consumption)** | ~$0–5/month | Free tier grants cover light usage; scale-to-zero |
+| **Azure Functions (Flex Consumption)** | ~$0–3/month | Free grants + scale-to-zero; ideal if workload is trigger-based |
 | **ACI** | ~$1–5/month | Cheap, but needs to be manually kept running |
 | **App Service (Free/Shared)** | $0–10/month | Free tier available but no custom containers; Basic starts at ~$13 |
 | **AKS** | ~$35+/month | Way overkill for a side project |
@@ -103,10 +108,18 @@ Understanding cost differences between Azure container services is critical for 
 3. **Use ACI for short-lived jobs** instead of keeping a VM or App Service Plan running
 4. **Share App Service Plans** — multiple apps can run on one plan to spread the cost
 5. **Use AKS spot node pools** for interruptible batch workloads to save up to 80%
-6. **Monitor actual usage** with Azure Cost Management to find over-provisioned resources
+6. **Use Azure Functions Flex Consumption** for discrete event handlers — you pay per execution, not per instance
+7. **Monitor actual usage** with Azure Cost Management to find over-provisioned resources
 
 ## Learn More
 
 - [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)
 - [Feature Comparison](feature-comparison.md)
+
+### Official Pricing Docs (GitHub)
+- [Container Apps billing](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-apps/billing.md)
+- [Container Instances pricing overview](https://github.com/microsoftdocs/azure-docs/blob/main/articles/container-instances/container-instances-overview.md)
+- [App Service plans and pricing](https://github.com/microsoftdocs/azure-docs/blob/main/articles/app-service/overview-hosting-plans.md)
+- [Azure Functions pricing overview](https://github.com/microsoftdocs/azure-docs/blob/main/articles/azure-functions/functions-scale.md)
+- [AKS pricing overview](https://github.com/microsoftdocs/azure-docs/blob/main/articles/aks/free-standard-pricing-tiers.md)
 - [Back to README](../README.md)
